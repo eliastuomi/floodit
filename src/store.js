@@ -8,14 +8,12 @@ import mainReducer from './reducers/mainReducer'
 
 const reducer = combineReducers({
   gameState: mainReducer.gameStateReducer,
-  gameGrid: mainReducer.gridReducer,
-//   availableColors: mainReducer.availableColorsReducer,
-  playerTurn: mainReducer.playerTurnReducer,
+  currentRoom: mainReducer.currentRoomReducer,
   gameVisible: mainReducer.gameVisibleReducer,
   user: mainReducer.userReducer,
-  playerNumber: mainReducer.playerNumberReducer,
-  colorNumber: mainReducer.colorNumberReducer,
-  dim: mainReducer.dimReducer
+  roomId: mainReducer.roomIdReducer,
+  showRooms: mainReducer.showRoomsReducer,
+  gameOver: mainReducer.gameOverReducer
 })
 
 const store = createStore(

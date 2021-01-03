@@ -1,12 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import roomService from '../services/room'
 import socketIOClient from "socket.io-client"
+import { Button } from 'react-bootstrap';
+
+
+
 const SOCKET_SERVER_URL = "http://localhost:3001"
 
 
 const Join = (props) => {
-
-    const [roomsAvailable, setRoomsAvailable] = useState([])
+    const [availableRooms, setAvailableRooms] = useState([])
     const socketRef = useRef()
 
 
@@ -14,21 +17,26 @@ const Join = (props) => {
         roomService
             .getAll()
             .then(response => {
-                setRoomsAvailable(response.data)
+                setAvailableRooms(response.data.filter(r => r.users.length < r.playerNumber))
             })
             .catch(error => {
                 console.log('fail')
             })
 
         socketRef.current = socketIOClient(SOCKET_SERVER_URL)
+        // socketRef.current = socketIOClient()
 
-        socketRef.current.on('update_showrooms_fromserver', (room) => {
-            console.log('CLIENT SAI PÄIVITYKSEN UUDESTA HUONEESTA', room)
-            setRoomsAvailable(roomsAvailable => [...roomsAvailable, room])
+
+        socketRef.current.on('new_availableroom', (room) => {
+            setAvailableRooms(availableRooms => [...availableRooms, room].filter(r => r.users.length < r.playerNumber))
         })
 
-        socketRef.current.on('update_showrooms', (room) => {
-            setRoomsAvailable(roomsAvailable => roomsAvailable.map(r => r.id === room.id ? room : r))
+        socketRef.current.on('updated_availableroom', (room) => {
+            setAvailableRooms(availableRooms => availableRooms.map(r => r.id === room.id ? room : r).filter(r => r.users.length < r.playerNumber))
+        })
+
+        socketRef.current.on('remove_availableroom', (id) => {
+            setAvailableRooms(availableRooms => availableRooms.filter(r => r.id !== id))
         })
 
         return () => socketRef.current.disconnect()
@@ -38,10 +46,13 @@ const Join = (props) => {
     return (
         <div>
             <ul>
-                {roomsAvailable.map(room => {
+                {availableRooms.map(room => {
                     return (
-                        <li key={room.id}>{room.roomName} --- {room.host} --- {room.users}
-                            <button onClick={() => props.handleJoinRoom({ ...room, users: room.users.concat(props.userName) })}>Join</button></li>
+                        <li key={room.id}>{room.roomName}, dimensions:{room.w}x{room.h}, colors:{room.colorNumber}
+                            <Button
+                                variant="primary"
+                                onClick={() => props.handleJoinRoom({ ...room, users: room.users.concat(props.nickName) })}>
+                                Join</Button></li>
 
                     )
                 }

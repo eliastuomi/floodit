@@ -24,38 +24,6 @@ export const setGameState = (data) => {
     }
 }
 
-const gridReducer = (state = [], action) => {
-    switch (action.type) {
-        case 'SET_GRID':
-            return action.data
-        default:
-            return state
-    }
-}
-
-export const setGameGrid = (data) => {
-    return {
-        type: 'SET_GRID',
-        data: data
-    }
-}
-
-const playerTurnReducer = (state = 1, action) => {
-    switch (action.type) {
-        case 'SET_PLAYERTURN':
-            return action.data
-        default:
-            return state
-    }
-}
-
-export const setPlayerTurn = (data) => {
-
-    return {
-        type: 'SET_PLAYERTURN',
-        data: data
-    }
-}
 
 const gameVisibleReducer = (state = false, action) => {
     switch (action.type) {
@@ -70,6 +38,23 @@ export const setGameVisible = (data) => {
 
     return {
         type: 'SET_GAME_VISIBLE',
+        data: data
+    }
+}
+
+const gameOverReducer = (state = true, action) => {
+    switch (action.type) {
+        case 'SET_GAME_OVER':
+            return action.data
+        default:
+            return state
+    }
+}
+
+export const setGameover = (data) => {
+
+    return {
+        type: 'SET_GAME_OVER',
         data: data
     }
 }
@@ -91,66 +76,67 @@ export const setUser = (data) => {
     }
 }
 
-const playerNumberReducer = (state = 0, action) => {
+const currentRoomReducer = (state = null, action) => {
     switch (action.type) {
-        case 'SET_PLAYER_NUMBER':
+        case 'SET_CURRENT_ROOM':
             return action.data
         default:
             return state
     }
 }
 
-export const setPlayerNumber = (data) => {
+export const setCurrentRoom = (data) => {
 
     return {
-        type: 'SET_PLAYER_NUMBER',
+        type: 'SET_CURRENT_ROOM',
         data: data
     }
 }
 
-const colorNumberReducer = (state = 5, action) => {
+const roomIdReducer = (state = null, action) => {
     switch (action.type) {
-        case 'SET_COLOR_NUMBER':
+        case 'SET_ROOMID':
             return action.data
         default:
             return state
     }
 }
 
-export const setColorNumber = (data) => {
+export const setRoomId = (data) => {
 
     return {
-        type: 'SET_COLOR_NUMBER',
+        type: 'SET_ROOMID',
         data: data
     }
 }
 
-const dimReducer = (state = {'w': 20, 'h': 20}, action) => {
+
+const showRoomsReducer = (state = false, action) => {
     switch (action.type) {
-        case 'SET_DIM':
+        case 'SET_SHOW_ROOMS':
             return action.data
         default:
             return state
     }
 }
 
-export const setDim = (data) => {
+export const setShowRooms = (data) => {
 
     return {
-        type: 'SET_DIM',
+        type: 'SET_SHOW_ROOMS',
         data: data
     }
 }
 
-
-export default {
+const mainReducer = {
     gameStateReducer,
-    gridReducer,
-    // availableColorsReducer,
-    playerTurnReducer,
     gameVisibleReducer,
     userReducer,
-    playerNumberReducer,
-    colorNumberReducer,
-    dimReducer
+    currentRoomReducer,
+    roomIdReducer,
+    showRoomsReducer,
+    gameOverReducer,
 }
+
+
+export default mainReducer

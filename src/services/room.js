@@ -23,6 +23,6 @@ const join = async (id, roomObject) => {
     return response.data
 }
 
+const room = { getAll, create, remove, join }
 
-
-export default { getAll, create, remove, join }
+export default room

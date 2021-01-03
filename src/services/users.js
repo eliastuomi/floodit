@@ -6,4 +6,4 @@ const signUp = async credentials => {
   return response.data
 }
 
-export default { signUp }
+export default signUp 

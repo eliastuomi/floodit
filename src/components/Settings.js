@@ -1,14 +1,14 @@
-import { useEffect, useRef, useState } from "react";
-import Game from './Game.js'
+import { useState } from "react";
 
 import { useDispatch, useSelector } from 'react-redux'
-import { setPlayerNumber, setColorNumber, setDim, setGameState } from '../reducers/mainReducer'
+import { setGameState } from '../reducers/mainReducer'
+import { Button } from 'react-bootstrap';
+
 
 
 
 const Settings = (props) => {
     const dispatch = useDispatch()
-    const gameVisible = useSelector(state => state.gameVisible)
     // const playerNumber = useSelector(state => state.playerNumber)
     const gameState = useSelector(state => state.gameState)
 
@@ -21,9 +21,7 @@ const Settings = (props) => {
         if (component === 'pn') setSettings({ ...settings, 'pn': Number(event.target.value) })
     }
     const handleSubmit = () => {
-        // dispatch(setColorNumber(settings['cn']))
-        // dispatch(setPlayerNumber(settings['pn']))
-        // dispatch(setDim({ 'w': settings['w'], 'h': settings['h'] }))
+
         const newGameState = {
             ...gameState,
             w: settings['w'],
@@ -34,72 +32,80 @@ const Settings = (props) => {
         dispatch(setGameState(newGameState))
     }
 
-    const textStyle = {
-        display: 'inline-block',
-        width: '50px'
-    }
-    const sliderStyle = {
-        display: 'inline-block',
-    }
-    const counterStyle = {
-        display: 'inline-block',
-    }
+    // const textStyle = {
+    //     display: 'inline-block',
+    //     width: '50px'
+    // }
+    // const sliderStyle = {
+    //     display: 'inline-block',
+    // }
+    // const counterStyle = {
+    //     display: 'inline-block',
+    // }
 
     return (
         <div>
-            {
-                !gameVisible ?
-                    <div>
+            <div>
 
-                        <div>
-                            <div style={textStyle}>Width</div>
-                            <input
-                                style={sliderStyle}
-                                type={'range'}
-                                min={10}
-                                max={100}
-                                value={settings['w']}
-                                onChange={(e) => handleSettingsChange(e, 'w')}
-                            />
-                            <div style={counterStyle}>{settings['w']}</div>
-                        </div>
+                <div>
+                    {/* <div style={textStyle}>Width</div> */}
+                    Width
+                    <input
+                        // style={sliderStyle}
+                        type={'range'}
+                        min={10}
+                        max={100}
+                        value={settings['w']}
+                        onChange={(e) => handleSettingsChange(e, 'w')}
+                    />
+                    {/* <div style={counterStyle}>{settings['w']}</div> */}
+                    {settings['w']}
+                </div>
 
-                        <div>
-                            <div style={textStyle}>Height</div>
-                            <input
-                                type={'range'}
-                                min={10}
-                                max={100}
-                                value={settings['h']}
-                                onChange={(e) => handleSettingsChange(e, 'h')}
-                            />
-                            {settings['h']}
-                        </div>
-                        <div>
-                            <div style={textStyle}>Colors</div>
-                            <input
-                                type={'range'}
-                                min={3}
-                                max={6}
-                                value={settings['cn']}
-                                onChange={(e) => handleSettingsChange(e, 'cn')}
-                            />
-                            {settings['cn']}
-                        </div>
-                        <div>
-                            <div style={textStyle}>Players</div>
-                            <input
-                                type={'range'}
-                                min={1}
-                                max={2}
-                                value={settings['pn']}
-                                onChange={(e) => handleSettingsChange(e, 'pn')}
-                            />
-                            {settings['pn']}
-                        </div>
-                        <div><button onClick={() => handleSubmit()}>Save Settings</button></div>
-                    </div> : ''
-            }
+                <div>
+                    Height
+                    <input
+                        type={'range'}
+                        min={10}
+                        max={100}
+                        value={settings['h']}
+                        onChange={(e) => handleSettingsChange(e, 'h')}
+                    />
+                    {settings['h']}
+                </div>
+                <div>
+                    Colors
+                    <input
+                        type={'range'}
+                        min={3}
+                        max={6}
+                        value={settings['cn']}
+                        onChange={(e) => handleSettingsChange(e, 'cn')}
+                    />
+                    {settings['cn']}
+                </div>
+                <div>
+                    Players
+                    <input
+                        type={'range'}
+                        min={1}
+                        max={2}
+                        value={settings['pn']}
+                        onChange={(e) => handleSettingsChange(e, 'pn')}
+                    />
+                    {settings['pn']}
+                </div>
+                <div>
+                    {gameState.w !== settings['w'] ||
+                        gameState.h !== settings['h'] ||
+                        gameState.playerNumber !== settings['pn'] ||
+                        gameState.colorNumber !== settings['cn'] ?
+                        <Button
+                            variant="primary"
+                            onClick={() => handleSubmit()}>
+                            Save Settings</Button> : ''}
+                </div>
+            </div>
 
         </div>
     )
