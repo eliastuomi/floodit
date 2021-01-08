@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux'
 
 
 import { setUser } from './reducers/mainReducer'
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col, Badge } from 'react-bootstrap';
 
 
 const App = () => {
@@ -26,12 +26,12 @@ const App = () => {
   return (
     <Container fluid>
       <Row>
-        <Col>
-          <h1>Flood It</h1>
+        <Col md={{ span: 4, offset: 4 }}>
+          <h1 className="text-center"><Badge variant="primary" >FLOOD IT</Badge></h1>
           {/* <Authentication /> */}
-          <Room />
         </Col>
       </Row>
+      <Room />
     </Container>
   )
 

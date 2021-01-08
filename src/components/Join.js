@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import roomService from '../services/room'
 import socketIOClient from "socket.io-client"
-import { Button } from 'react-bootstrap';
+import { Button, Table } from 'react-bootstrap';
 
 
 
@@ -23,8 +23,8 @@ const Join = (props) => {
                 console.log('fail')
             })
 
-        socketRef.current = socketIOClient(SOCKET_SERVER_URL)
-        // socketRef.current = socketIOClient()
+        // socketRef.current = socketIOClient(SOCKET_SERVER_URL)
+        socketRef.current = socketIOClient()
 
 
         socketRef.current.on('new_availableroom', (room) => {
@@ -44,21 +44,34 @@ const Join = (props) => {
     }, [])
 
     return (
-        <div>
-            <ul>
+        <Table striped hover>
+            <thead>
+                <tr>
+                    <th>Host</th>
+                    <th>W</th>
+                    <th>H</th>
+                    <th>colors</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
                 {availableRooms.map(room => {
                     return (
-                        <li key={room.id}>{room.roomName}, dimensions:{room.w}x{room.h}, colors:{room.colorNumber}
-                            <Button
+                        <tr key={room.id}>
+                            <td>{room.host}</td>
+                            <td>{room.w}</td>
+                            <td>{room.h}</td>
+                            <td>{room.colorNumber}</td>
+                            <td><Button
                                 variant="primary"
                                 onClick={() => props.handleJoinRoom({ ...room, users: room.users.concat(props.nickName) })}>
-                                Join</Button></li>
-
+                                Join</Button></td>
+                        </tr>
                     )
                 }
                 )}
-            </ul>
-        </div>
+            </tbody>
+        </Table>
     )
 }
 

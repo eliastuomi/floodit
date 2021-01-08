@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { useDispatch, useSelector } from 'react-redux'
 import { setGameState } from '../reducers/mainReducer'
-import { Button } from 'react-bootstrap';
+import { Button, Form, Badge, ButtonGroup, ToggleButton } from 'react-bootstrap';
 
 
 
@@ -12,7 +12,11 @@ const Settings = (props) => {
     // const playerNumber = useSelector(state => state.playerNumber)
     const gameState = useSelector(state => state.gameState)
 
-    const [settings, setSettings] = useState({ 'w': 10, 'h': 10, 'cn': 5, 'pn': 1 })
+    const [settings, setSettings] = useState({ 'w': 25, 'h': 25, 'cn': 5, 'pn': 1 })
+
+    useEffect(() => {
+        setSettings({ w: gameState.w, h: gameState.h, cn: gameState.colorNumber, pn: gameState.playerNumber })
+    }, [gameState])
 
     const handleSettingsChange = (event, component) => {
         if (component === 'w') setSettings({ ...settings, 'w': Number(event.target.value) })
@@ -32,81 +36,93 @@ const Settings = (props) => {
         dispatch(setGameState(newGameState))
     }
 
-    // const textStyle = {
-    //     display: 'inline-block',
-    //     width: '50px'
-    // }
-    // const sliderStyle = {
-    //     display: 'inline-block',
-    // }
-    // const counterStyle = {
-    //     display: 'inline-block',
-    // }
 
     return (
         <div>
-            <div>
-
-                <div>
-                    {/* <div style={textStyle}>Width</div> */}
-                    Width
-                    <input
-                        // style={sliderStyle}
-                        type={'range'}
-                        min={10}
-                        max={100}
-                        value={settings['w']}
-                        onChange={(e) => handleSettingsChange(e, 'w')}
-                    />
-                    {/* <div style={counterStyle}>{settings['w']}</div> */}
-                    {settings['w']}
-                </div>
-
-                <div>
-                    Height
-                    <input
-                        type={'range'}
-                        min={10}
-                        max={100}
-                        value={settings['h']}
-                        onChange={(e) => handleSettingsChange(e, 'h')}
-                    />
-                    {settings['h']}
-                </div>
-                <div>
-                    Colors
-                    <input
-                        type={'range'}
-                        min={3}
-                        max={6}
-                        value={settings['cn']}
-                        onChange={(e) => handleSettingsChange(e, 'cn')}
-                    />
-                    {settings['cn']}
-                </div>
-                <div>
-                    Players
-                    <input
-                        type={'range'}
-                        min={1}
-                        max={2}
-                        value={settings['pn']}
-                        onChange={(e) => handleSettingsChange(e, 'pn')}
-                    />
-                    {settings['pn']}
-                </div>
-                <div>
+            <Form>
+                <Form.Group>
+                    <h5 className="text-center"><Badge variant="secondary" >WODTH</Badge></h5>
+                    <ButtonGroup className="d-flex" toggle>
+                        <Button
+                            variant="secondary"
+                            onClick={() => setSettings({ ...settings, 'w': Math.max(settings['w'] - 5, 0) })}>
+                            -</Button>
+                        <Button
+                            variant="secondary"
+                            disabled={true}>
+                            {settings['w']}</Button>
+                        <Button
+                            variant="secondary"
+                            onClick={() => setSettings({ ...settings, 'w': Math.min(settings['w'] + 5, 100) })}>
+                            +</Button>
+                    </ButtonGroup>
+                </Form.Group>
+                <Form.Group>
+                    <h5 className="text-center"><Badge variant="secondary" >HEIGHT</Badge></h5>
+                    <ButtonGroup className="d-flex" toggle>
+                        <Button
+                            variant="secondary"
+                            onClick={() => setSettings({ ...settings, 'h': Math.max(settings['h'] - 5, 0) })}>
+                            -</Button>
+                        <Button
+                            variant="secondary"
+                            disabled={true}>
+                            {settings['h']}</Button>
+                        <Button
+                            variant="secondary"
+                            onClick={() => setSettings({ ...settings, 'h': Math.min(settings['h'] + 5, 100) })}>
+                            +</Button>
+                    </ButtonGroup>
+                </Form.Group>
+                <Form.Group>
+                    <h5 className="text-center"><Badge variant="secondary" >COLORS</Badge></h5>
+                    <ButtonGroup className="d-flex" toggle>
+                        {[3, 4, 5, 6].map(val => {
+                            return (
+                                <ToggleButton
+                                    key={val}
+                                    type="radio"
+                                    variant="secondary"
+                                    value={val}
+                                    checked={settings['cn'] === val}
+                                    onChange={(e) => handleSettingsChange(e, 'cn')}>
+                                    {val}</ToggleButton>
+                            )
+                        })
+                        }
+                    </ButtonGroup>
+                </Form.Group>
+                <Form.Group>
+                    <h5 className="text-center"><Badge variant="secondary" >PLAYERS</Badge></h5>
+                    <ButtonGroup className="d-flex" toggle>
+                        <ToggleButton
+                            type="radio"
+                            variant="secondary"
+                            value={1}
+                            checked={settings['pn'] === 1}
+                            onChange={(e) => handleSettingsChange(e, 'pn')}>
+                            1</ToggleButton>
+                        <ToggleButton
+                            type="radio"
+                            variant="secondary"
+                            value={2}
+                            checked={settings['pn'] === 2}
+                            onChange={(e) => handleSettingsChange(e, 'pn')}>
+                            2</ToggleButton>
+                    </ButtonGroup>
+                </Form.Group>
+                <Form.Group>
                     {gameState.w !== settings['w'] ||
                         gameState.h !== settings['h'] ||
                         gameState.playerNumber !== settings['pn'] ||
                         gameState.colorNumber !== settings['cn'] ?
                         <Button
-                            variant="primary"
+                            variant="outline-primary"
+                            block
                             onClick={() => handleSubmit()}>
                             Save Settings</Button> : ''}
-                </div>
-            </div>
-
+                </Form.Group>
+            </Form>
         </div>
     )
 }

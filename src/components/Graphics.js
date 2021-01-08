@@ -5,6 +5,7 @@ const Graphics = props => {
     const gameState = useSelector(state => state.gameState)
 
     const canvasRef = useRef(null)
+    const blockSize = 14
 
     const getColor = colorIndex => {
         switch (colorIndex) {
@@ -34,27 +35,27 @@ const Graphics = props => {
     }
 
     const draw = ctx => {
-        ctx.clearRect(0, 0, gameState.gameGrid[0].length * 15, gameState.gameGrid.length * 15)
+        ctx.clearRect(0, 0, gameState.gameGrid[0].length * blockSize, gameState.gameGrid.length * blockSize)
 
         for (let x = 0; x < gameState.gameGrid[0].length; x++) {
             for (let y = 0; y < gameState.gameGrid.length; y++) {
 
                 ctx.fillStyle = getColor(gameState.gameGrid[y][x][0])
-                ctx.fillRect(x * 15, y * 15, 15, 15)
+                ctx.fillRect(x * blockSize, y * blockSize, blockSize, blockSize)
 
                 if (checkNeighbour(gameState.gameGrid, x + 1, y) && gameState.gameGrid[y][x][0] !== gameState.gameGrid[y][x + 1][0]) {
                     ctx.beginPath();
                     ctx.strokeStyle = "black";
-                    ctx.moveTo(x * 15 + 15, y * 15);
-                    ctx.lineTo(x * 15 + 15, y * 15 + 15);
+                    ctx.moveTo(x * blockSize + blockSize, y * blockSize);
+                    ctx.lineTo(x * blockSize + blockSize, y * blockSize + blockSize);
                     ctx.stroke();
                     ctx.closePath()
                 }
                 if (checkNeighbour(gameState.gameGrid, x, y + 1) && gameState.gameGrid[y][x][0] !== gameState.gameGrid[y + 1][x][0]) {
                     ctx.beginPath();
                     ctx.strokeStyle = "black";
-                    ctx.moveTo(x * 15, y * 15 + 15);
-                    ctx.lineTo(x * 15 + 15, y * 15 + 15);
+                    ctx.moveTo(x * blockSize, y * blockSize + blockSize);
+                    ctx.lineTo(x * blockSize + blockSize, y * blockSize + blockSize);
                     ctx.stroke();
                     ctx.closePath()
 
@@ -75,13 +76,16 @@ const Graphics = props => {
 
 
 
-    const boardStyle = {
-        outline: "black 2px solid",
-        marginLeft: '2px'
-    }
+        const boardStyle = {
+            outline: "black 1px solid",
+            display: "block",
+            marginLeft: "auto",
+            marginRight: "auto"
+
+        }
 
     return (
-        <canvas ref={canvasRef} width={gameState.gameGrid[0].length * 15} height={gameState.gameGrid.length * 15} style={boardStyle}> </canvas>
+        <canvas ref={canvasRef} width={gameState.gameGrid[0].length * blockSize} height={gameState.gameGrid.length * blockSize} style={boardStyle}> </canvas>
     )
 
 }

@@ -33,23 +33,31 @@ const GameButtons = props => {
                 return 'black'
         }
     }
+    const plateStyle = {
+        display: "flex",
+        justifyContent: "center"
+
+    }
 
     const buttonstyle = {
         height: '50px',
         width: '50px',
+        borderRadius: '8px',
+
     }
 
     return (
-        <div>
+        <div style={plateStyle}>
             {
                 availableColors.map(color => {
                     return <button
                         style={{
-                            marginTop: '5px',
+                            // marginTop: '5px',
                             marginBottom: '6px',
-                            marginRight: '5px',
+                            // marginRight: '5px',
                             //border: getColor(color),
                             backgroundColor: props.clickable ? getColor(color) : 'grey',
+                            border: `2px solid ${props.clickable ? getColor(color) : 'grey'}`,
                             ...buttonstyle
                         }}
                         key={color}

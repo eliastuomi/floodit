@@ -4,8 +4,8 @@ const initialState = {
     playerNumber: 1,
     playerTurn:1,
     colorNumber: 5,
-    w: 10,
-    h: 10,
+    w: 25,
+    h: 25,
 }
 
 const gameStateReducer = (state = initialState, action) => {

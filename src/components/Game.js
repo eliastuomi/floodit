@@ -8,7 +8,7 @@ import Progress from './Progress'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { setGameState } from '../reducers/mainReducer'
-import { Button } from 'react-bootstrap';
+import { Button, Badge, Row, Col } from 'react-bootstrap';
 
 
 
@@ -255,15 +255,16 @@ const Game = props => {
     // }
 
     return (
+        <>
+            <Row>
+                <Col md={{ span: 4, offset: 4 }}>
 
-        <div>
-            {/* <div style={{ marginTop: '5px' }}> */}
-            <div>
-                {gameOver && props.isHost ? <Button
-                    variant="primary"
-                    onClick={newGameButtonHandler}>
-                    Start game!</Button> : ''}
-                {/* {
+                    {gameOver && props.isHost ? <Button
+                        variant="outline-danger"
+                        block
+                        onClick={newGameButtonHandler}>
+                        Start game!</Button> : ''}
+                    {/* {
                     gameVisible ?
                         <div>
                             <button onClick={newGameButtonHandler} style={{ float: 'left' }}>New Game!</button>
@@ -275,16 +276,33 @@ const Game = props => {
                             <button onClick={newGameButtonHandler}>New Game!</button>
                         </div>
                 } */}
-            </div>
+                </Col>
+            </Row>
             {gameVisible ?
                 <div>
-                    {gameState.playerNumber === 2 ? <div>{currentTurn} vuoro</div> : ''}
-                    {!gameOver ? <GameButtons playTurnButtonHandler={playTurnButtonHandler} clickable={currentTurn === props.me} /> : ''}
-                    <Graphics />
-                    <Progress />
+                    <Row>
+                        <Col md={{ span: 4, offset: 4 }}>
+                            {/* {gameState.playerNumber === 2 ?
+
+                                <Badge variant="danger">{currentTurn}</Badge>
+
+                                : ''} */}
+                            {!gameOver ? <GameButtons playTurnButtonHandler={playTurnButtonHandler} clickable={currentTurn === props.me} /> : ''}
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <Graphics />
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col md={{ span: 4, offset: 4 }}>
+                            <Progress />
+                        </Col>
+                    </Row>
                 </div> : ''}
 
-        </div>
+        </>
     )
 }
 

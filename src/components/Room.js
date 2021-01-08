@@ -10,7 +10,7 @@ import Chat from './Chat.js'
 import { setGameVisible, setGameState, setCurrentRoom, setRoomId, setShowRooms, setGameover } from '../reducers/mainReducer'
 import socketIOClient from "socket.io-client"
 
-import { Button } from 'react-bootstrap';
+import { Button, Form, Col, Row, Badge } from 'react-bootstrap';
 
 const SOCKET_SERVER_URL = "http://localhost:3001"
 
@@ -30,8 +30,8 @@ const Room = (props) => {
 
     useEffect(() => {
 
-        socketRef.current = socketIOClient(SOCKET_SERVER_URL)
-        // socketRef.current = socketIOClient()
+        // socketRef.current = socketIOClient(SOCKET_SERVER_URL)
+        socketRef.current = socketIOClient()
 
         roomId && isHost() && socketRef.current.emit('create', roomId)
         roomId && !isHost() && socketRef.current.emit('join', { roomId: roomId, roomObject: currentRoom })
@@ -174,53 +174,71 @@ const Room = (props) => {
         socketRef.current.emit('start_game', { roomId: roomId, gameState: gameState })
     }
 
-    return (
+    const showRoomComponent = () => (
         <div>
+            <Join handleJoinRoom={handleJoinRoom} nickName={nickName} />
+            <Button
+                variant="outline-primary"
+                block
+                onClick={handleShowRooms}>
+                Hide rooms</Button>
+        </div>
+    )
+
+    const createRoomComponent = () => (
+        <Form>
+            <Form.Group>
+                <Form.Control value={nickName}
+                    placeholder={'set username'}
+                    onChange={(event) => setNickName(event.target.value.length > 10 ? nickName : event.target.value)}>
+                </Form.Control>
+            </Form.Group>
+            <Form.Group>
+                {nickName !== '' ? <Button
+                    variant="outline-primary"
+                    block
+                    onClick={handleCreate}>
+                    Create room</Button> : ''}
+            </Form.Group>
+            <Form.Group>
+                {nickName !== '' ? <Button
+                    variant="outline-primary"
+                    block
+                    onClick={handleShowRooms}>
+                    Show rooms</Button> : ''}
+            </Form.Group>
+        </Form>
+    )
+
+
+
+    return (
+        <>
             { !currentRoom ?
-                <div>
-                    {!showRooms ?
-                        <div>
-                            <input placeholder={'set nickname'} value={nickName} onChange={(event) => setNickName(event.target.value)}></input>
+                <Row>
+                    <Col md={{ span: 4, offset: 4 }}>
+                        {!showRooms ?
+                            <>
+                                {createRoomComponent()}
+                                <Settings />
 
-                            {nickName !== '' ? <Button
-                                variant="primary"
-                                onClick={handleCreate}>
-                                Create room</Button> : ''}
-                            {nickName !== '' ? <Button
-                                variant="primary"
-                                onClick={handleShowRooms}>
-                                Show rooms</Button> : ''}
-                            <Settings />
-                        </div> :
-                        <div>
-                            <Join handleJoinRoom={handleJoinRoom} nickName={nickName} />
-                            <Button
-                                variant="primary"
-                                onClick={handleShowRooms}>
-                                Hide rooms</Button>
-                        </div>
-                    }
-                </div> :
+                            </>
+                            :
+                            <>
+                                {showRoomComponent()}
+                            </>
+                        }
+                    </Col>
+                </Row> :
+
 
                 <div>
-                    <Chat handleSendChat={handleSendChat} chatLog={chatLog} />
-                    {isHost() ?
-                        <div>
-                            you are host in {currentRoom.roomName}
-                            <Button
-                                variant="primary"
-                                onClick={() => handleLeaveHost()}>
-                                Leave room</Button>
-
-                        </div> :
-                        <div>
-                            you are in {currentRoom.roomName}
-                            <Button
-                                variant="primary"
-                                onClick={() => handleLeave()}>
-                                Leave</Button>
-                        </div>}
-
+                    {/* <Row>
+                        <Col md={{ span: 4, offset: 4 }}>
+                            <div className="text-center"><Badge variant="danger">HOST: {currentRoom.users[0].toUpperCase()}</Badge></div>
+                        </Col>
+                    </Row>
+                    <br></br> */}
                     <div>
                         {
                             currentRoom.users.length === currentRoom.playerNumber ?
@@ -230,11 +248,37 @@ const Room = (props) => {
                                 </div> : ''
                         }
                     </div>
+                    <Row>
+                        <Col md={{ span: 4, offset: 4 }}>
+                            <Chat handleSendChat={handleSendChat} me={nickName} chatLog={chatLog} />
+                            {isHost() ?
+                                <div>
+                                    <Button
+                                        size="sm"
+                                        variant="outline-primary"
+                                        block
+                                        onClick={() => handleLeaveHost()}>
+                                        Leave room</Button>
+                                        <br></br>
 
+                                </div> :
+                                <div>
+                                    <Button
+                                        size="sm"
+                                        variant="outline-primary"
+                                        block
+                                        onClick={() => handleLeave()}>
+                                        Leave</Button>
+                                        <br></br>
+                                </div>
+
+                            }
+                        </Col>
+                    </Row>
                 </div>
             }
 
-        </div>
+        </>
     )
 }
 
