@@ -1,6 +1,6 @@
 # Flood It
 
-Simple flood it game created with react.
+Simple flood it realt-time multiplayer game created with react.
 
 To run in the development mode:
 - Get server started (see [https://github.com/eliastuomi/floodit_backend](https://github.com/eliastuomi/floodit_backend))
@@ -9,7 +9,8 @@ To run in the development mode:
 - npm start
 - Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-
+<img src="docs/IMG1.png" width="300">
+<img src="docs/IMG2.png" width="300">
 
 
 ## Author
